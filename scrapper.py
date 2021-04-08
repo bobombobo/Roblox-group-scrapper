@@ -1,5 +1,6 @@
+#Roblox group scraper v2
 import random
-import time
+from time import sleep
 import string
 import requests
 import json
@@ -8,31 +9,40 @@ from requests import Session
 from colorama import Fore, init
 init(autoreset=True)
 
-text = """
+
+text1 = (Fore.RED + """
 ╋╋╋╋┏┓╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋┏━┓
 ┏┳┳━┫┗┳┓┏━┳┳┓┏━┳┳┳━┳┳┳━┓┃━╋━┳┳┳━┓┏━┳━┳━┳┳┓
 ┃┏┫╋┃╋┃┗┫╋┣┃┫┃╋┃┏┫╋┃┃┃╋┃┣━┃━┫┏┫╋┗┫╋┃╋┃┻┫┏┛
 ┗┛┗━┻━┻━┻━┻┻┛┣┓┣┛┗━┻━┫┏┛┗━┻━┻┛┗━━┫┏┫┏┻━┻┛
 ╋╋╋╋╋╋╋╋╋╋╋╋╋┗━┛╋╋╋╋╋┗┛╋╋╋╋╋╋╋╋╋╋┗┛┗┛
-by boboMbobo | https://github.com/bobombobo/
-"""
+""" + Fore.GREEN + """Roblox group scrapper (v2 recode) | by boboMbobo | https://github.com/bobombobo/
+"""+ Fore.WHITE + """ID generation generation types:
 
-print(text)
-run_ammount = input("input times to run: ")
-run_ammount_int=int(run_ammount)
+[1] Generation via a range of numbers ex: checks all groups with id's between 2,000,000 and 2,010,000
+[2] Random 7 digit number (can be changed to different digit lenght)
+""")
+
+print(text1)
+
+#choice=int(input("--->>>"))
+
 runtime=0
-goodgroups = {}
+goodgroups = []
 groupsfound=0
 groupswithbuildersclub=0
+run_ammount_int=0
 
-while run_ammount_int>runtime:
-  runtime=runtime+1
-  id = ''.join(random.choice(string.digits) for i in range(7))
+choice=int(input("[1] Range\n[2] Random\n--->>>"))
+
+def scrape(int_id):
+  id=str(int_id)
   group = requests.get('https://groups.roblox.com/v1/groups/' + id)
   if group.status_code == 200:
     print("-------------------------------------")
     #print(group)
     #print(id)
+    global groupsfound
     groupsfound=groupsfound+1
     print("id: " + str(id))
     print("Group name: " + group.json()["name"])
@@ -65,7 +75,7 @@ while run_ammount_int>runtime:
     if group.json()['owner'] == None and group.json()['publicEntryAllowed'] == True:
         print(Fore.GREEN + "https://www.roblox.com/groups/" + str(id))
         print("Avalible json data:\n " + str(group.json()))
-        wait(10)
+        sleep(1)
         goodgroups.append("https://www.roblox.com/groups/" + str(id))
         print("-------------------------------------")
 
@@ -74,23 +84,32 @@ while run_ammount_int>runtime:
 
   elif group.status_code == 400:
       pass
-
   else:
       pass
+
+
+if choice==1:
+  print("Scraping id range:")
+  min_ = int(input("Min: "))
+  max_1 = int(input("Max: "))
+  max_=int(max_1+1)
+  for x in range(min_,max_):
+    scrape(x)
+  run_ammount_int=max_-min_
+
+if choice==2:
+  run_ammount = input("input times to run: ")
+  run_ammount_int=int(run_ammount)
+  while run_ammount_int>runtime:
+    id = ''.join(random.choice(string.digits) for i in range(7)) #Generates random number with 7 digits in the range(x) where x is the digit length
+    runtime=runtime+1
+    scrape(id)
+
+
 
 print("")     
 print(goodgroups)
 print("")
-
-print("Some fun math stuff:")
-print("Groups found: " + str(groupsfound) + "/" + run_ammount)
-groupmath=(100*(1-(groupsfound/run_ammount_int)))
+print("Groups found: " + str(groupsfound) + "/" + str(run_ammount_int))
+groupmath=(100*(1-(groupsfound/run_ammount_int)))#I hate math so much dude had think for a bit to whip this up
 print("Ammount lost (%): %" + str(groupmath))
-
-
-print("groups with builders club sub: " + str(groupswithbuildersclub) + "/" + run_ammount)
-try: 
-  buildersmath=(100*(1-(run_ammount_int/groupswithbuildersclub)))
-  print("Groups with builders club (%): %" + str(buildersmath))
-except:
-  print("Groups with builders club (%): %0.0")
