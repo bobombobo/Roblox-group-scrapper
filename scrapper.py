@@ -1,4 +1,11 @@
 #Roblox group scraper v2
+#boboMbobo Licence notice (custom terms and conditions)
+#You MAY NOT under no circumstance (unless granted by myself) distribute this code without giving credit to me.
+#You MAY NOT under no circumstance use this code as a producte without somewhat changing the fucntionality to make it your own code. (This includes selling it, or using it inside of a program being sold.)
+#You MAY modify the code and redistribute it (With credit to me) in any way.
+#Usage of code to produce other products is allowed in specfic circumstances (any group info scrapped may be sold a seperate product).
+#I reserve the rights to modify this license without notice and I can restrict usage if I find your usage to be unfit to this licence.
+
 import random
 from time import sleep
 import string
